@@ -1,5 +1,6 @@
 package eu.mantykora.sylaby
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +11,7 @@ import java.util.*
 import android.system.Os.shutdown
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_syllable.*
 
 
 class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
@@ -78,6 +80,16 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
         })
 
+//
+//        ObjectAnimator.ofFloat(button3, "translationX", 20f).apply {
+//            duration = 2000
+//
+//            start()
+//        }
+
+
+
+      // button3.animate().translationX(400f);
 
     }
 
