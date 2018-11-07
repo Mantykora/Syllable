@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint_syllable"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SyllableActivity">
@@ -17,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/placeHolder1"
         style="@style/button_style"
         android:layout_marginStart="40dp"
         android:layout_marginTop="40dp"
@@ -26,52 +27,52 @@
         tools:text="ma" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/placeHolder2"
         style="@style/button_style"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.137"
-        app:layout_constraintStart_toEndOf="@+id/button"
-        app:layout_constraintTop_toTopOf="@+id/button" />
+        app:layout_constraintStart_toEndOf="@+id/placeHolder1"
+        app:layout_constraintTop_toTopOf="@+id/placeHolder1" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/syllable1"
         style="@style/button_style"
         android:layout_marginStart="24dp"
         android:layout_marginTop="12dp"
         android:text="ma"
 
-        app:layout_constraintEnd_toStartOf="@+id/button4"
+        app:layout_constraintEnd_toStartOf="@+id/syllable2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/syllable2"
         style="@style/button_style"
         android:layout_marginStart="24dp"
         android:text="ta"
-        app:layout_constraintEnd_toStartOf="@+id/button5"
-        app:layout_constraintStart_toEndOf="@+id/button3"
-        app:layout_constraintTop_toTopOf="@+id/button3" />
+        app:layout_constraintEnd_toStartOf="@+id/syllable3"
+        app:layout_constraintStart_toEndOf="@+id/syllable1"
+        app:layout_constraintTop_toTopOf="@+id/syllable1" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/syllable3"
         style="@style/button_style"
         android:layout_marginStart="24dp"
         android:text="ma"
-        app:layout_constraintEnd_toStartOf="@+id/button6"
-        app:layout_constraintStart_toEndOf="@+id/button4"
-        app:layout_constraintTop_toTopOf="@+id/button4" />
+        app:layout_constraintEnd_toStartOf="@+id/syllable4"
+        app:layout_constraintStart_toEndOf="@+id/syllable2"
+        app:layout_constraintTop_toTopOf="@+id/syllable2" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/syllable4"
 
         style="@style/button_style"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="24dp"
         android:text="ba"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button5"
-        app:layout_constraintTop_toTopOf="@+id/button5" />
+        app:layout_constraintStart_toEndOf="@+id/syllable3"
+        app:layout_constraintTop_toTopOf="@+id/syllable3" />
 </android.support.constraint.ConstraintLayout>
