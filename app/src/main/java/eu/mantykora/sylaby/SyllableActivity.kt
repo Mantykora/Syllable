@@ -2,8 +2,11 @@ package eu.mantykora.sylaby
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
+import eu.mantykora.sylaby.model.Placeholder
+import eu.mantykora.sylaby.model.Syllable
 import kotlinx.android.synthetic.main.activity_syllable.*
 
 class SyllableActivity : AppCompatActivity() {
@@ -13,6 +16,8 @@ class SyllableActivity : AppCompatActivity() {
     val booleanArray = arrayOf(false, false, false, false)
     val isFreeBooleanArray = arrayOf(true, true)
     val placeDimensionsIntArray: Array<IntArray> = arrayOf(placeDimensions1, placeDimensions2)
+    val syll1 = mutableListOf<Syllable>()
+    val place1 = mutableListOf<Placeholder>()
 
     override fun onResume() {
         super.onResume()
@@ -47,12 +52,30 @@ class SyllableActivity : AppCompatActivity() {
                 syllable3.getLocationInWindow(syllableDimensions3)
                 syllable4.getLocationInWindow(syllableDimensions4)
 
+                syll1.addAll(
+                        listOf(
+                                Syllable(content = "ma", buttonIndex = 0, buttonDimensionX = syllableDimensions1.get(0), buttonDimensionY = syllableDimensions1.get(1)),
+                                Syllable(content = "ta", buttonIndex = 1, buttonDimensionX = syllableDimensions2.get(0), buttonDimensionY = syllableDimensions2.get(1)),
+                                Syllable(content = "ma", buttonIndex = 2, buttonDimensionX = syllableDimensions3.get(0), buttonDimensionY = syllableDimensions3.get(1)),
+                                Syllable(content = "ba", buttonIndex = 3, buttonDimensionX = syllableDimensions4.get(0), buttonDimensionY = syllableDimensions4.get(1))
+                        )
+                )
+
+                place1.addAll(
+                        listOf(
+                               Placeholder(0, placeDimensions1.get(0), placeDimensions1.get(1)),
+                                Placeholder(1, placeDimensions2.get(0), placeDimensions2.get(1))
+                        )
+                )
+
                 val clickListener: View.OnClickListener = View.OnClickListener { view ->
                     when (view.id) {
-                        R.id.syllable1 -> moveButton(0, placeDimensions1, view, syllableDimensions1)
-                        R.id.syllable2 -> moveButton(1, placeDimensions1, view, syllableDimensions2)
-                        R.id.syllable3 -> moveButton(2, placeDimensions1, view, syllableDimensions3)
-                        R.id.syllable4 -> moveButton(3, placeDimensions1, view, syllableDimensions4)
+                       // R.id.syllable1 -> moveButton(0, placeDimensions1, view, syllableDimensions1)
+//                        R.id.syllable2 -> moveButton(1, placeDimensions1, view, syllableDimensions2)
+//                        R.id.syllable3 -> moveButton(2, placeDimensions1, view, syllableDimensions3)
+//                        R.id.syllable4 -> moveButton(3, placeDimensions1, view, syllableDimensions4)
+
+                        R.id.syllable1 -> moveButton1(0, view)
 
 
                     }
@@ -71,46 +94,76 @@ class SyllableActivity : AppCompatActivity() {
 
     }
 
-    private fun moveButton(index: Int, placeDimensions: IntArray, v: View?, syllableDimensions: IntArray) {
+
+    private fun moveButton1(index: Int, v: View?)  {
+
+        //search for first free placeholder
+        val placeholder: Placeholder = place1.first {
+            it.isFree
+        }
+        placeholder.copy(isFree = false)
+
+        val syllable = syll1[index];
+        if (!syllable.isMoved) {
+            syll1[index] = syllable.copy(isMoved = true)
+            v!!.animate().x(placeholder.placeholderDimensionX.toFloat()).y(placeholder.placeholderDimensionY.toFloat())
+
+        } else {
+            syll1[index] = syllable.copy(isMoved = false)
+            v!!.animate().x(syllable.buttonDimensionX.toFloat()).y(syllable.buttonDimensionY.toFloat())
+
+        }
+
+
+    }
+
+//    private fun moveButton(index: Int, placeDimensions: IntArray, v: View?, syllableDimensions: IntArray) {
+//
+//        val placeIndex = goToRightPlace()
+//
+//
+//        if (!booleanArray.get(index)) {
+//
+//            booleanArray.set(index, true)
+//            val place: IntArray = placeDimensionsIntArray.get(placeIndex)
+//            val float: Float = place.get(0).toFloat();
+//            val float2: Float = place.get(1).toFloat();
+//            v!!.animate().x(float).y(float2)
+//        } else {
+//            booleanArray.set(index, false)
+//            isFreeBooleanArray.set(placeIndex, true)
+//            v!!.animate().x(syllableDimensions.get(0).toFloat()).y(syllableDimensions.get(1).toFloat())
+//
+//        }
+//    }
+//
+//    private fun goToRightPlace(): Int {
 //        for (i in isFreeBooleanArray.indices) {
+//            if (i == isFreeBooleanArray.size - 1 && isFreeBooleanArray.get(i) == true) {
+//                //last iteration
+//                Log.d("lastIteration", "message")
+//
+//            }
 //            if (isFreeBooleanArray.get(i) == true) {
 //                isFreeBooleanArray.set(i, false)
 //
-//                return placeDimensionsIntArray(i)
+//                return i
 //            }
+//
+//
 //        }
+//
+//        for (i in isFreeBooleanArray.indices) {
+//            isFreeBooleanArray.set(i, true)
+//
+//        }
+//        return 0
+//    }
 
-        val placeIndex = goToRightPlace()
 
-        if (!booleanArray.get(index)) {
-            booleanArray.set(index, true)
-            val place: IntArray = placeDimensionsIntArray.get(placeIndex)
-            val float: Float = place.get(0).toFloat();
-            val float2: Float = place.get(1).toFloat();
-            v!!.animate().x(float).y(float2)
-        } else {
-            booleanArray.set(index, false)
-            isFreeBooleanArray.set(placeIndex, true)
-            v!!.animate().x(syllableDimensions.get(0).toFloat()).y(syllableDimensions.get(1).toFloat())
+//    private fun foToRightPlace1():
 
-        }
-    }
 
-    private fun goToRightPlace(): Int {
-        for (i in isFreeBooleanArray.indices) {
-            if (isFreeBooleanArray.get(i) == true) {
-                isFreeBooleanArray.set(i, false)
-
-                return i
-            }
-        }
-
-        for (i in isFreeBooleanArray.indices) {
-            isFreeBooleanArray.set(i, true)
-
-        }
-        return 0
-    }
 }
 
 
