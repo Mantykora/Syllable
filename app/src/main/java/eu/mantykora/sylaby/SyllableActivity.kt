@@ -19,6 +19,8 @@ class SyllableActivity : AppCompatActivity() {
     val syll1 = mutableListOf<Syllable>()
     val place1 = mutableListOf<Placeholder>()
 
+    var placeIndex: Int = 0
+
     override fun onResume() {
         super.onResume()
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE or
@@ -76,6 +78,10 @@ class SyllableActivity : AppCompatActivity() {
 //                        R.id.syllable4 -> moveButton(3, placeDimensions1, view, syllableDimensions4)
 
                         R.id.syllable1 -> moveButton1(0, view)
+                        R.id.syllable2 -> moveButton1(1, view)
+                        R.id.syllable3 -> moveButton1(2, view)
+                        R.id.syllable4 -> moveButton1(3, view)
+
 
 
                     }
@@ -98,19 +104,50 @@ class SyllableActivity : AppCompatActivity() {
     private fun moveButton1(index: Int, v: View?)  {
 
         //search for first free placeholder
-        val placeholder: Placeholder = place1.first {
-            it.isFree
-        }
-        placeholder.copy(isFree = false)
+
+
+//        if (placeIndex == -1) {
+//
+//        }
+
+
+
+        //placeholder.copy(isFree = false)
+
+
+        //val placeholder = place1[placeIndex]
+
 
         val syllable = syll1[index];
         if (!syllable.isMoved) {
+
             syll1[index] = syllable.copy(isMoved = true)
+
+            placeIndex = place1.indexOfFirst {
+                it.isFree
+            }
+
+            val placeholder = place1[placeIndex]
+            place1[placeIndex] = placeholder.copy(isFree = false)
+
+            syll1[index] = syllable.copy(isMoved = true, placeholderIndex = placeIndex)
+
             v!!.animate().x(placeholder.placeholderDimensionX.toFloat()).y(placeholder.placeholderDimensionY.toFloat())
 
         } else {
             syll1[index] = syllable.copy(isMoved = false)
+
+
+            val returnPlaceholderIndex: Int = syllable.placeholderIndex
+
+            val placeholder = place1[returnPlaceholderIndex]
+
+
+            place1[returnPlaceholderIndex] = placeholder.copy(isFree = true)
+
             v!!.animate().x(syllable.buttonDimensionX.toFloat()).y(syllable.buttonDimensionY.toFloat())
+
+
 
         }
 
