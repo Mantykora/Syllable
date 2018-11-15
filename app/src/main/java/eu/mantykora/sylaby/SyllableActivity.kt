@@ -42,6 +42,7 @@ class SyllableActivity : AppCompatActivity() {
         val syllableDimensions3: IntArray = intArrayOf(0, 0)
         val syllableDimensions4: IntArray = intArrayOf(0, 0)
 
+
         constraint_syllable.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 constraint_syllable.viewTreeObserver.removeOnGlobalLayoutListener(this)
@@ -69,6 +70,11 @@ class SyllableActivity : AppCompatActivity() {
                                 Placeholder(1, placeDimensions2.get(0), placeDimensions2.get(1))
                         )
                 )
+
+                syllable1.setText(syll1[0].content)
+                syllable2.setText(syll1[1].content)
+                syllable3.setText(syll1[2].content)
+                syllable4.setText(syll1[3].content)
 
                 val clickListener: View.OnClickListener = View.OnClickListener { view ->
                     when (view.id) {
@@ -103,40 +109,30 @@ class SyllableActivity : AppCompatActivity() {
 
     private fun moveButton1(index: Int, v: View?)  {
 
-        //search for first free placeholder
-
-
-//        if (placeIndex == -1) {
-//
-//        }
-
-
-
-        //placeholder.copy(isFree = false)
-
-
-        //val placeholder = place1[placeIndex]
-
-
         val syllable = syll1[index];
         if (!syllable.isMoved) {
 
             syll1[index] = syllable.copy(isMoved = true)
 
+            //search for first free placeholder
             placeIndex = place1.indexOfFirst {
                 it.isFree
             }
 
             val placeholder = place1[placeIndex]
-            place1[placeIndex] = placeholder.copy(isFree = false)
+            place1[placeIndex] = placeholder.copy(isFree = false, syllableIndex = index)
 
             syll1[index] = syllable.copy(isMoved = true, placeholderIndex = placeIndex)
 
             v!!.animate().x(placeholder.placeholderDimensionX.toFloat()).y(placeholder.placeholderDimensionY.toFloat())
 
+            if (placeIndex == place1.size-1) {
+                        evaluateWord(v)
+                        Log.d("last", placeIndex.toString())
+                    }
+
         } else {
             syll1[index] = syllable.copy(isMoved = false)
-
 
             val returnPlaceholderIndex: Int = syllable.placeholderIndex
 
@@ -154,53 +150,40 @@ class SyllableActivity : AppCompatActivity() {
 
     }
 
-//    private fun moveButton(index: Int, placeDimensions: IntArray, v: View?, syllableDimensions: IntArray) {
-//
-//        val placeIndex = goToRightPlace()
-//
-//
-//        if (!booleanArray.get(index)) {
-//
-//            booleanArray.set(index, true)
-//            val place: IntArray = placeDimensionsIntArray.get(placeIndex)
-//            val float: Float = place.get(0).toFloat();
-//            val float2: Float = place.get(1).toFloat();
-//            v!!.animate().x(float).y(float2)
-//        } else {
-//            booleanArray.set(index, false)
-//            isFreeBooleanArray.set(placeIndex, true)
-//            v!!.animate().x(syllableDimensions.get(0).toFloat()).y(syllableDimensions.get(1).toFloat())
-//
-//        }
-//    }
-//
-//    private fun goToRightPlace(): Int {
-//        for (i in isFreeBooleanArray.indices) {
-//            if (i == isFreeBooleanArray.size - 1 && isFreeBooleanArray.get(i) == true) {
-//                //last iteration
-//                Log.d("lastIteration", "message")
-//
-//            }
-//            if (isFreeBooleanArray.get(i) == true) {
-//                isFreeBooleanArray.set(i, false)
-//
-//                return i
-//            }
-//
-//
-//        }
-//
-//        for (i in isFreeBooleanArray.indices) {
-//            isFreeBooleanArray.set(i, true)
-//
-//        }
-//        return 0
-//    }
+
+    private fun evaluateWord(v: View?) {
+
+        val word: String = "mama"
+        var composedWord: String = ""
+
+        place1.get(0)
+
+        place1.forEach {
+           composedWord += syll1[it.syllableIndex].content
+        }
+
+        if (word == composedWord) {
+            //TODO show success popup (block touchscreen)
+        } else {
+
+            place1.forEach {
+                it.syllableIndex
+
+            }
+
+            //TODO return all buttons
 
 
-//    private fun foToRightPlace1():
+        }
+
+        Log.d("tag", word + composedWord)
+
+
+
+    }
 
 
 }
 
 
+//TODO odglosy
