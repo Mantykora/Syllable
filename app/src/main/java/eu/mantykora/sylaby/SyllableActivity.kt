@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
+import android.widget.Button
 import eu.mantykora.sylaby.model.Placeholder
 import eu.mantykora.sylaby.model.Syllable
 import kotlinx.android.synthetic.main.activity_syllable.*
@@ -16,8 +17,8 @@ class SyllableActivity : AppCompatActivity() {
     val booleanArray = arrayOf(false, false, false, false)
     val isFreeBooleanArray = arrayOf(true, true)
     val placeDimensionsIntArray: Array<IntArray> = arrayOf(placeDimensions1, placeDimensions2)
-    val syll1 = mutableListOf<Syllable>()
-    val place1 = mutableListOf<Placeholder>()
+    val syllables = mutableListOf<Syllable>()
+    val placeholders = mutableListOf<Placeholder>()
 
     var placeIndex: Int = 0
 
@@ -55,26 +56,26 @@ class SyllableActivity : AppCompatActivity() {
                 syllable3.getLocationInWindow(syllableDimensions3)
                 syllable4.getLocationInWindow(syllableDimensions4)
 
-                syll1.addAll(
+                syllables.addAll(
                         listOf(
-                                Syllable(content = "ma", buttonIndex = 0, buttonDimensionX = syllableDimensions1.get(0), buttonDimensionY = syllableDimensions1.get(1)),
-                                Syllable(content = "ta", buttonIndex = 1, buttonDimensionX = syllableDimensions2.get(0), buttonDimensionY = syllableDimensions2.get(1)),
-                                Syllable(content = "ma", buttonIndex = 2, buttonDimensionX = syllableDimensions3.get(0), buttonDimensionY = syllableDimensions3.get(1)),
-                                Syllable(content = "ba", buttonIndex = 3, buttonDimensionX = syllableDimensions4.get(0), buttonDimensionY = syllableDimensions4.get(1))
+                                Syllable(content = "ma", buttonIndex = 0, buttonDimensionX = syllableDimensions1.get(0), buttonDimensionY = syllableDimensions1.get(1), id = R.id.syllable1),
+                                Syllable(content = "ta", buttonIndex = 1, buttonDimensionX = syllableDimensions2.get(0), buttonDimensionY = syllableDimensions2.get(1), id = R.id.syllable2),
+                                Syllable(content = "ma", buttonIndex = 2, buttonDimensionX = syllableDimensions3.get(0), buttonDimensionY = syllableDimensions3.get(1), id = R.id.syllable3),
+                                Syllable(content = "ba", buttonIndex = 3, buttonDimensionX = syllableDimensions4.get(0), buttonDimensionY = syllableDimensions4.get(1), id = R.id.syllable4)
                         )
                 )
 
-                place1.addAll(
+                placeholders.addAll(
                         listOf(
                                Placeholder(0, placeDimensions1.get(0), placeDimensions1.get(1)),
                                 Placeholder(1, placeDimensions2.get(0), placeDimensions2.get(1))
                         )
                 )
 
-                syllable1.setText(syll1[0].content)
-                syllable2.setText(syll1[1].content)
-                syllable3.setText(syll1[2].content)
-                syllable4.setText(syll1[3].content)
+                syllable1.setText(syllables[0].content)
+                syllable2.setText(syllables[1].content)
+                syllable3.setText(syllables[2].content)
+                syllable4.setText(syllables[3].content)
 
                 val clickListener: View.OnClickListener = View.OnClickListener { view ->
                     when (view.id) {
@@ -89,6 +90,12 @@ class SyllableActivity : AppCompatActivity() {
                         R.id.syllable4 -> moveButton1(3, view)
 
 
+
+                    }
+
+                    if (placeIndex == placeholders.size-1) {
+                        evaluateWord(view)
+                        Log.d("last", placeIndex.toString())
 
                     }
 
@@ -109,37 +116,34 @@ class SyllableActivity : AppCompatActivity() {
 
     private fun moveButton1(index: Int, v: View?)  {
 
-        val syllable = syll1[index];
+        val syllable = syllables[index];
         if (!syllable.isMoved) {
 
-            syll1[index] = syllable.copy(isMoved = true)
+            syllables[index] = syllable.copy(isMoved = true)
 
             //search for first free placeholder
-            placeIndex = place1.indexOfFirst {
+            placeIndex = placeholders.indexOfFirst {
                 it.isFree
             }
 
-            val placeholder = place1[placeIndex]
-            place1[placeIndex] = placeholder.copy(isFree = false, syllableIndex = index)
+            val placeholder = placeholders[placeIndex]
+            placeholders[placeIndex] = placeholder.copy(isFree = false, syllableIndex = index)
 
-            syll1[index] = syllable.copy(isMoved = true, placeholderIndex = placeIndex)
+            syllables[index] = syllable.copy(isMoved = true, placeholderIndex = placeIndex)
 
             v!!.animate().x(placeholder.placeholderDimensionX.toFloat()).y(placeholder.placeholderDimensionY.toFloat())
 
-            if (placeIndex == place1.size-1) {
-                        evaluateWord(v)
-                        Log.d("last", placeIndex.toString())
-                    }
+
 
         } else {
-            syll1[index] = syllable.copy(isMoved = false)
+            syllables[index] = syllable.copy(isMoved = false)
 
             val returnPlaceholderIndex: Int = syllable.placeholderIndex
 
-            val placeholder = place1[returnPlaceholderIndex]
+            val placeholder = placeholders[returnPlaceholderIndex]
 
 
-            place1[returnPlaceholderIndex] = placeholder.copy(isFree = true)
+            placeholders[returnPlaceholderIndex] = placeholder.copy(isFree = true)
 
             v!!.animate().x(syllable.buttonDimensionX.toFloat()).y(syllable.buttonDimensionY.toFloat())
 
@@ -156,18 +160,32 @@ class SyllableActivity : AppCompatActivity() {
         val word: String = "mama"
         var composedWord: String = ""
 
-        place1.get(0)
+        placeholders.get(0)
 
-        place1.forEach {
-           composedWord += syll1[it.syllableIndex].content
+        placeholders.forEach {
+           composedWord += syllables[it.syllableIndex].content
         }
 
         if (word == composedWord) {
             //TODO show success popup (block touchscreen)
         } else {
 
-            place1.forEach {
-                it.syllableIndex
+            placeholders.forEach {
+                val syllable = syllables[it.syllableIndex];
+                findViewById<Button>(syllables[it.syllableIndex].id).animate().x(syllables[it.syllableIndex].buttonDimensionX.toFloat()).y(syllables[it.syllableIndex].buttonDimensionY.toFloat())
+
+//                syllables[it.syllableIndex] = syllables[it.syllableIndex].copy(isMoved = false)
+                syllables.set(it.syllableIndex, syllable.copy(isMoved = false))
+                val c = 0
+
+                it.isFree = true
+
+
+               // placeholders.set(is)
+//                val placeholder = placeholders[placeIndex]
+//                it = placeholder.copy(isFree = true)
+
+
 
             }
 
