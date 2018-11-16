@@ -1,7 +1,10 @@
 package eu.mantykora.sylaby
 
+import android.media.AudioAttributes
+import android.media.SoundPool
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
@@ -22,6 +25,13 @@ class SyllableActivity : AppCompatActivity() {
 
     var placeIndex: Int = 0
 
+    var attributes: AudioAttributes? = null
+    var soundPool: SoundPool? = null
+    var succcessSoundId: Int = 0
+    var errorSoundId: Int = 0
+    var clickSoundId: Int = 0
+
+
     override fun onResume() {
         super.onResume()
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE or
@@ -37,6 +47,15 @@ class SyllableActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_syllable)
+
+//        val soundPool: SoundPool = SoundPool(5, AudioManager.STREAM_MUSIC, 0)
+//        soundPool.setOnLoadCompleteListener {
+//            soundPool, sampleId, status ->
+//        }
+
+
+
+
 
         val syllableDimensions1: IntArray = intArrayOf(0, 0)
         val syllableDimensions2: IntArray = intArrayOf(0, 0)
@@ -107,10 +126,31 @@ class SyllableActivity : AppCompatActivity() {
 
         })
 
+        attributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build()
+
+         soundPool = SoundPool.Builder()
+                .setAudioAttributes(attributes)
+                .build()
+
+        if (soundPool != null) {
+            succcessSoundId = soundPool!!.load(applicationContext, R.raw.success, 1)
+            errorSoundId = soundPool!!.load(applicationContext, R.raw.error, 1)
+            clickSoundId = soundPool!!.load(applicationContext, R.raw.click, 1)
+
+
+            //releae SoundPool resources after use
+            //soundPool.release()
+        }
     }
 
 
     private fun moveButton1(index: Int, v: View?)  {
+
+        soundPool!!.play(clickSoundId, 1F, 1F, 1, 0, 1F)
+
 
         val syllable = syllables[index];
         if (!syllable.isMoved) {
@@ -122,22 +162,30 @@ class SyllableActivity : AppCompatActivity() {
                 it.isFree
             }
 
-            val placeholder = placeholders[placeIndex]
-            placeholders[placeIndex] = placeholder.copy(isFree = false, syllableIndex = index)
+            if (placeIndex != -1) {
 
-            syllables[index] = syllable.copy(isMoved = true, placeholderIndex = placeIndex)
+                val placeholder = placeholders[placeIndex]
+                placeholders[placeIndex] = placeholder.copy(isFree = false, syllableIndex = index)
 
-            v!!.animate().x(placeholder.placeholderDimensionX.toFloat()).y(placeholder.placeholderDimensionY.toFloat()).withEndAction(Runnable {
+                syllables[index] = syllable.copy(isMoved = true, placeholderIndex = placeIndex)
 
-                if (placeIndex == placeholders.size-1) {
-                    evaluateWord(v)
-                    Log.d("last", placeIndex.toString())
-
-                }
-            })
+                v!!.animate().x(placeholder.placeholderDimensionX.toFloat()).y(placeholder.placeholderDimensionY.toFloat()).withEndAction(Runnable {
 
 
+                    if (placeIndex == placeholders.size - 1) {
+                        Handler().postDelayed({
 
+                            evaluateWord(v)
+                            Log.d("last", placeIndex.toString())
+                            //doSomethingHere()
+                        }, 500)
+
+
+                    }
+                })
+
+
+            }
         } else {
             syllables[index] = syllable.copy(isMoved = false)
 
@@ -170,6 +218,9 @@ class SyllableActivity : AppCompatActivity() {
         }
 
         if (word == composedWord) {
+
+            soundPool!!.play(succcessSoundId, 1F, 1F, 1, 0, 1F)
+
             //TODO show success popup (block touchscreen)
         } else {
 
@@ -184,7 +235,9 @@ class SyllableActivity : AppCompatActivity() {
                 it.isFree = true
 
 
-               // placeholders.set(is)
+                soundPool!!.play(errorSoundId, 1F, 1F, 1, 0, 1F)
+
+                // placeholders.set(is)
 //                val placeholder = placeholders[placeIndex]
 //                it = placeholder.copy(isFree = true)
 
