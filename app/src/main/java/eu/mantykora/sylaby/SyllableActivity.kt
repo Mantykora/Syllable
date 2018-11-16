@@ -93,11 +93,7 @@ class SyllableActivity : AppCompatActivity() {
 
                     }
 
-                    if (placeIndex == placeholders.size-1) {
-                        evaluateWord(view)
-                        Log.d("last", placeIndex.toString())
 
-                    }
 
 
                 }
@@ -131,7 +127,14 @@ class SyllableActivity : AppCompatActivity() {
 
             syllables[index] = syllable.copy(isMoved = true, placeholderIndex = placeIndex)
 
-            v!!.animate().x(placeholder.placeholderDimensionX.toFloat()).y(placeholder.placeholderDimensionY.toFloat())
+            v!!.animate().x(placeholder.placeholderDimensionX.toFloat()).y(placeholder.placeholderDimensionY.toFloat()).withEndAction(Runnable {
+
+                if (placeIndex == placeholders.size-1) {
+                    evaluateWord(v)
+                    Log.d("last", placeIndex.toString())
+
+                }
+            })
 
 
 
