@@ -48,15 +48,6 @@ class SyllableActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_syllable)
 
-//        val soundPool: SoundPool = SoundPool(5, AudioManager.STREAM_MUSIC, 0)
-//        soundPool.setOnLoadCompleteListener {
-//            soundPool, sampleId, status ->
-//        }
-
-
-
-
-
         val syllableDimensions1: IntArray = intArrayOf(0, 0)
         val syllableDimensions2: IntArray = intArrayOf(0, 0)
         val syllableDimensions3: IntArray = intArrayOf(0, 0)

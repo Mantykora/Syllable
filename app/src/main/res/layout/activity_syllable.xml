@@ -11,24 +11,30 @@
         android:id="@+id/imageView"
         android:layout_width="142dp"
         android:layout_height="136dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/ic_girly"
+        app:layout_constraintBottom_toTopOf="@+id/syllable1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/placeHolder1"
         style="@style/button_style"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/placeholder_shape"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
         tools:text="ma" />
 
     <Button
         android:id="@+id/placeHolder2"
         style="@style/button_style"
+        android:background="@drawable/placeholder_shape"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,16 +45,23 @@
     <Button
         android:id="@+id/syllable1"
         style="@style/button_style"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
 
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+
+        android:background="@drawable/button_shape_v2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/syllable2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        tools:text="ma" />
 
     <Button
         android:id="@+id/syllable2"
         style="@style/button_style"
+        android:background="@drawable/button_shape_v2"
+
         android:layout_marginStart="24dp"
         app:layout_constraintEnd_toStartOf="@+id/syllable3"
         app:layout_constraintStart_toEndOf="@+id/syllable1"
@@ -57,6 +70,7 @@
     <Button
         android:id="@+id/syllable3"
         style="@style/button_style"
+        android:background="@drawable/button_shape_v2"
         android:layout_marginStart="24dp"
         app:layout_constraintEnd_toStartOf="@+id/syllable4"
         app:layout_constraintStart_toEndOf="@+id/syllable2"
@@ -66,6 +80,8 @@
         android:id="@+id/syllable4"
 
         style="@style/button_style"
+        android:background="@drawable/button_shape_v2"
+
         android:layout_marginEnd="8dp"
         android:layout_marginStart="24dp"
         app:layout_constraintEnd_toEndOf="parent"
