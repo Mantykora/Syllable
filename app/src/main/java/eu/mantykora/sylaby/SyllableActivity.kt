@@ -1,17 +1,21 @@
 package eu.mantykora.sylaby
 
+import android.content.DialogInterface
 import android.media.AudioAttributes
 import android.media.SoundPool
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Button
+import android.widget.ImageButton
 import eu.mantykora.sylaby.model.Placeholder
 import eu.mantykora.sylaby.model.Syllable
 import kotlinx.android.synthetic.main.activity_syllable.*
+import kotlinx.android.synthetic.main.success_alert_dialog.*
 
 class SyllableActivity : AppCompatActivity() {
     val placeDimensions1: IntArray = intArrayOf(0, 0)
@@ -164,6 +168,8 @@ class SyllableActivity : AppCompatActivity() {
 
 
                     if (placeIndex == placeholders.size - 1) {
+
+
                         Handler().postDelayed({
 
                             evaluateWord(v)
@@ -212,6 +218,10 @@ class SyllableActivity : AppCompatActivity() {
 
             soundPool!!.play(succcessSoundId, 1F, 1F, 1, 0, 1F)
 
+           showAlertDialog()
+
+            return
+
             //TODO show success popup (block touchscreen)
         } else {
 
@@ -247,7 +257,44 @@ class SyllableActivity : AppCompatActivity() {
 
     }
 
+    private fun showAlertDialog() {
 
+        val builder = AlertDialog.Builder(this@SyllableActivity)
+        builder.setTitle("BRAWO!")
+
+       val view = layoutInflater.inflate(R.layout.success_alert_dialog, null)
+        builder.setView(view)
+
+        val refreshButton = view.findViewById<ImageButton>(R.id.refresh_alert_button)
+
+        refreshButton.setOnClickListener(View.OnClickListener {
+
+            Log.d("click", "refresh")
+        })
+
+        val nextButton = view.findViewById<ImageButton>(R.id.next_alert_button)
+
+        nextButton.setOnClickListener(View.OnClickListener {
+            Log.d("click", "next")
+        })
+
+
+
+
+        val dialog: AlertDialog = builder.create()
+
+        dialog.show()
+
+
+    }
+
+
+}
+
+private fun ImageButton.setOnClickListener(clickListener: DialogInterface.OnClickListener) {
+   Log.d("click", "refresh")
+
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
 }
 
 
