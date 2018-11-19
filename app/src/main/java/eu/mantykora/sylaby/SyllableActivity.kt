@@ -27,7 +27,6 @@ class SyllableActivity : AppCompatActivity() {
     val syllables = mutableListOf<Syllable>()
     val placeholders = mutableListOf<Placeholder>()
 
-    var placeIndex: Int = 0
 
     var attributes: AudioAttributes? = null
     var soundPool: SoundPool? = null
@@ -146,6 +145,9 @@ class SyllableActivity : AppCompatActivity() {
 
         soundPool!!.play(clickSoundId, 1F, 1F, 1, 0, 1F)
 
+        var placeIndex: Int = 0
+
+
 
         val syllable = syllables[index];
         if (!syllable.isMoved) {
@@ -153,6 +155,7 @@ class SyllableActivity : AppCompatActivity() {
             syllables[index] = syllable.copy(isMoved = true)
 
             //search for first free placeholder
+
             placeIndex = placeholders.indexOfFirst {
                 it.isFree
             }
