@@ -1,0 +1,23 @@
+[
+    {
+      "imagePath": "ic_girly",
+      "result": [0, 2],
+      "syllables": [
+        "ma",
+        "ta",
+        "ma",
+        "ba"
+      ]
+    },
+    {
+      "imagePath": 0,
+      "result": [],
+      "syllables": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ]
+    }
+]
+

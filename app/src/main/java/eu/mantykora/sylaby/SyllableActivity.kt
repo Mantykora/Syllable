@@ -12,10 +12,18 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Button
 import android.widget.ImageButton
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
+import eu.mantykora.sylaby.model.Level
 import eu.mantykora.sylaby.model.Placeholder
 import eu.mantykora.sylaby.model.Syllable
 import kotlinx.android.synthetic.main.activity_syllable.*
 import kotlinx.android.synthetic.main.success_alert_dialog.*
+import java.io.BufferedReader
+import java.io.FileReader
+import java.io.InputStreamReader
+import java.lang.reflect.Type
 
 class SyllableActivity : AppCompatActivity() {
     val placeDimensions1: IntArray = intArrayOf(0, 0)
@@ -138,6 +146,27 @@ class SyllableActivity : AppCompatActivity() {
             //releae SoundPool resources after use
             //soundPool.release()
         }
+
+//        val level = Level()
+
+//        val gson = GsonBuilder().setPrettyPrinting().create()
+//        val string: String = gson.toJson(level)
+//
+//        Log.d("json", string)
+//
+
+        val gson = Gson()
+
+
+        val br = BufferedReader(InputStreamReader(this.resources.openRawResource(R.raw.level_data)))
+        //val br = BufferedReader(FileReader("level_data.json"))
+        val listType = object: TypeToken<List<Level>>() {}.type
+        var levelList: ArrayList<Level> = ArrayList()
+        levelList = gson.fromJson(br, listType)
+
+        Log.d("levelString", levelList[0].toString())
+
+        
     }
 
 
@@ -225,7 +254,6 @@ class SyllableActivity : AppCompatActivity() {
 
             return
 
-            //TODO show success popup (block touchscreen)
         } else {
 
             placeholders.forEach {
@@ -286,6 +314,11 @@ class SyllableActivity : AppCompatActivity() {
 
         val dialog: AlertDialog = builder.create()
 
+        //TODO uncomment this lines, easier testing without
+//        dialog.setCancelable(false)
+//        dialog.setCanceledOnTouchOutside(false)
+
+
         dialog.show()
 
 
@@ -294,11 +327,5 @@ class SyllableActivity : AppCompatActivity() {
 
 }
 
-private fun ImageButton.setOnClickListener(clickListener: DialogInterface.OnClickListener) {
-   Log.d("click", "refresh")
-
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-}
 
 
-//TODO odglosy
