@@ -7,7 +7,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 27
 
-    
+
     defaultConfig {
         applicationId "eu.mantykora.sylaby"
         minSdkVersion 21

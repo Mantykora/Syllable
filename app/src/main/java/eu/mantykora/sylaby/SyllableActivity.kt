@@ -1,5 +1,6 @@
 package eu.mantykora.sylaby
 
+import android.content.Context
 import android.media.AudioAttributes
 import android.media.SoundPool
 import android.os.Bundle
@@ -20,6 +21,9 @@ import eu.mantykora.sylaby.model.Syllable
 import kotlinx.android.synthetic.main.activity_syllable.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import android.graphics.drawable.Drawable
+import android.os.PersistableBundle
+
 
 class SyllableActivity : AppCompatActivity() {
     val placeDimensions1: IntArray = intArrayOf(0, 0)
@@ -41,9 +45,13 @@ class SyllableActivity : AppCompatActivity() {
 
     var levelList: ArrayList<Level> = ArrayList()
 
+    var levelNumber = 0
+
 
     override fun onResume() {
         super.onResume()
+
+
 
         Log.d("lifecycle", "onResume")
 
@@ -76,6 +84,9 @@ class SyllableActivity : AppCompatActivity() {
 
         Log.d("lifecycle", "onCreate")
 
+        val sharedPref = applicationContext?.getSharedPreferences("level", Context.MODE_PRIVATE)
+        levelNumber = sharedPref?.getInt("levelInt", 0)!!
+
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE or
                 View.SYSTEM_UI_FLAG_FULLSCREEN or
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
@@ -98,6 +109,16 @@ class SyllableActivity : AppCompatActivity() {
         val listType = object: TypeToken<List<Level>>() {}.type
         levelList = gson.fromJson(br, listType)
 
+
+
+
+        val res = getResources()
+        val drawable = levelList[levelNumber!!].imagePath
+        val resID = res.getIdentifier(drawable , "drawable", getPackageName())
+        level_image.setImageResource(resID)
+
+
+
         Log.d("levelString", levelList[0].toString())
 
 
@@ -115,10 +136,10 @@ class SyllableActivity : AppCompatActivity() {
 
                 syllables.addAll(
                         listOf(
-                                Syllable(levelList[0].syllables[0], buttonIndex = 0, buttonDimensionX = syllableDimensions1.get(0), buttonDimensionY = syllableDimensions1.get(1), id = R.id.syllable1),
-                                Syllable(levelList[0].syllables[1], buttonIndex = 1, buttonDimensionX = syllableDimensions2.get(0), buttonDimensionY = syllableDimensions2.get(1), id = R.id.syllable2),
-                                Syllable(levelList[0].syllables[2], buttonIndex = 2, buttonDimensionX = syllableDimensions3.get(0), buttonDimensionY = syllableDimensions3.get(1), id = R.id.syllable3),
-                                Syllable(levelList[0].syllables[3], buttonIndex = 3, buttonDimensionX = syllableDimensions4.get(0), buttonDimensionY = syllableDimensions4.get(1), id = R.id.syllable4)
+                                Syllable(levelList[levelNumber].syllables[0], buttonIndex = 0, buttonDimensionX = syllableDimensions1.get(0), buttonDimensionY = syllableDimensions1.get(1), id = R.id.syllable1),
+                                Syllable(levelList[levelNumber].syllables[1], buttonIndex = 1, buttonDimensionX = syllableDimensions2.get(0), buttonDimensionY = syllableDimensions2.get(1), id = R.id.syllable2),
+                                Syllable(levelList[levelNumber].syllables[2], buttonIndex = 2, buttonDimensionX = syllableDimensions3.get(0), buttonDimensionY = syllableDimensions3.get(1), id = R.id.syllable3),
+                                Syllable(levelList[levelNumber].syllables[3], buttonIndex = 3, buttonDimensionX = syllableDimensions4.get(0), buttonDimensionY = syllableDimensions4.get(1), id = R.id.syllable4)
                         )
                 )
 
@@ -193,6 +214,16 @@ class SyllableActivity : AppCompatActivity() {
 
 
     }
+
+//    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+//        super.onSaveInstanceState(outState, outPersistentState)
+//        outState?.putInt("level", levelNumber)
+//    }
+//
+//    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+//        super.onRestoreInstanceState(savedInstanceState)
+//        levelNumber = savedInstanceState?.getInt("level")!!
+//    }
 
     override fun onStart() {
         Log.d("lifecycle", "onStart")
@@ -293,8 +324,8 @@ class SyllableActivity : AppCompatActivity() {
         val reversedResultList: ArrayList<Int>
         val composedResult: ArrayList<Int> = ArrayList()
 
-        resultList = levelList[0].result
-        reversedResultList = levelList[0].resultReversed
+        resultList = levelList[levelNumber].result
+        reversedResultList = levelList[levelNumber].resultReversed
         placeholders.get(0)
 
         placeholders.forEach {
@@ -357,6 +388,7 @@ class SyllableActivity : AppCompatActivity() {
         builder.setView(view)
 
         val refreshButton = view.findViewById<ImageButton>(R.id.refresh_alert_button)
+        val dialog: AlertDialog = builder.create()
 
         refreshButton.setOnClickListener(View.OnClickListener {
 
@@ -366,13 +398,19 @@ class SyllableActivity : AppCompatActivity() {
         val nextButton = view.findViewById<ImageButton>(R.id.next_alert_button)
 
         nextButton.setOnClickListener(View.OnClickListener {
+            val sharedPref = applicationContext?.getSharedPreferences("level", Context.MODE_PRIVATE)
+            sharedPref?.edit()?.putInt("levelInt", levelNumber+1)
+                    ?.apply()
+            levelNumber++
+            recreate()
+            dialog.dismiss()
+
             Log.d("click", "next")
         })
 
 
 
 
-        val dialog: AlertDialog = builder.create()
 
         //TODO uncomment this lines, easier testing without
 //        dialog.setCancelable(false)

@@ -1,6 +1,6 @@
 [
     {
-      "imagePath": "ic_girly",
+      "imagePath": "ic_breastfeeding",
       "result": [0, 2],
       "resultReversed": [2, 0],
       "syllables": [
@@ -11,13 +11,14 @@
       ]
     },
     {
-      "imagePath": 0,
-      "result": [],
+      "imagePath": "ic_father",
+      "result": [1, 2],
+      "resultReversed": [2, 1],
       "syllables": [
-        "1",
-        "2",
-        "3",
-        "4"
+        "ba",
+        "ta",
+        "ta",
+        "ma"
       ]
     }
 ]

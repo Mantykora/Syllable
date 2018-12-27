@@ -1,6 +1,7 @@
 package eu.mantykora.sylaby
 
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -54,7 +55,10 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-       // supportActionBar?.hide()
+        this.getSharedPreferences("level", Context.MODE_PRIVATE).edit().clear().apply();
+
+
+        // supportActionBar?.hide()
 
         mVisible = true
 
