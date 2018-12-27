@@ -2,6 +2,7 @@
     {
       "imagePath": "ic_girly",
       "result": [0, 2],
+      "resultReversed": [2, 0],
       "syllables": [
         "ma",
         "ta",

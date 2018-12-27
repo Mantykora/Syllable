@@ -1,29 +1,25 @@
 package eu.mantykora.sylaby
 
-import android.content.DialogInterface
 import android.media.AudioAttributes
 import android.media.SoundPool
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageButton
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import eu.mantykora.sylaby.model.Level
 import eu.mantykora.sylaby.model.Placeholder
 import eu.mantykora.sylaby.model.Syllable
 import kotlinx.android.synthetic.main.activity_syllable.*
-import kotlinx.android.synthetic.main.success_alert_dialog.*
 import java.io.BufferedReader
-import java.io.FileReader
 import java.io.InputStreamReader
-import java.lang.reflect.Type
 
 class SyllableActivity : AppCompatActivity() {
     val placeDimensions1: IntArray = intArrayOf(0, 0)
@@ -36,15 +32,21 @@ class SyllableActivity : AppCompatActivity() {
     val placeholders = mutableListOf<Placeholder>()
 
 
+
     var attributes: AudioAttributes? = null
     var soundPool: SoundPool? = null
     var succcessSoundId: Int = 0
     var errorSoundId: Int = 0
     var clickSoundId: Int = 0
 
+    var levelList: ArrayList<Level> = ArrayList()
+
 
     override fun onResume() {
         super.onResume()
+
+        Log.d("lifecycle", "onResume")
+
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE or
                 View.SYSTEM_UI_FLAG_FULLSCREEN or
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
@@ -53,16 +55,50 @@ class SyllableActivity : AppCompatActivity() {
                 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         supportActionBar?.hide()
 
+
     }
+
+//    override fun onWindowFocusChanged(hasFocus: Boolean) {
+//        super.onWindowFocusChanged(hasFocus)
+//        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE or
+//                View.SYSTEM_UI_FLAG_FULLSCREEN or
+//                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+//                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+//                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+//                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//        supportActionBar?.hide()
+//
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_syllable)
 
+        Log.d("lifecycle", "onCreate")
+
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE or
+                View.SYSTEM_UI_FLAG_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        supportActionBar?.hide()
+
+
         val syllableDimensions1: IntArray = intArrayOf(0, 0)
         val syllableDimensions2: IntArray = intArrayOf(0, 0)
         val syllableDimensions3: IntArray = intArrayOf(0, 0)
         val syllableDimensions4: IntArray = intArrayOf(0, 0)
+
+
+        //read data from json file and save it to levelList
+        val gson = Gson()
+        val br = BufferedReader(InputStreamReader(this.resources.openRawResource(R.raw.level_data)))
+
+        val listType = object: TypeToken<List<Level>>() {}.type
+        levelList = gson.fromJson(br, listType)
+
+        Log.d("levelString", levelList[0].toString())
 
 
         constraint_syllable.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -79,10 +115,10 @@ class SyllableActivity : AppCompatActivity() {
 
                 syllables.addAll(
                         listOf(
-                                Syllable(content = "ma", buttonIndex = 0, buttonDimensionX = syllableDimensions1.get(0), buttonDimensionY = syllableDimensions1.get(1), id = R.id.syllable1),
-                                Syllable(content = "ta", buttonIndex = 1, buttonDimensionX = syllableDimensions2.get(0), buttonDimensionY = syllableDimensions2.get(1), id = R.id.syllable2),
-                                Syllable(content = "ma", buttonIndex = 2, buttonDimensionX = syllableDimensions3.get(0), buttonDimensionY = syllableDimensions3.get(1), id = R.id.syllable3),
-                                Syllable(content = "ba", buttonIndex = 3, buttonDimensionX = syllableDimensions4.get(0), buttonDimensionY = syllableDimensions4.get(1), id = R.id.syllable4)
+                                Syllable(levelList[0].syllables[0], buttonIndex = 0, buttonDimensionX = syllableDimensions1.get(0), buttonDimensionY = syllableDimensions1.get(1), id = R.id.syllable1),
+                                Syllable(levelList[0].syllables[1], buttonIndex = 1, buttonDimensionX = syllableDimensions2.get(0), buttonDimensionY = syllableDimensions2.get(1), id = R.id.syllable2),
+                                Syllable(levelList[0].syllables[2], buttonIndex = 2, buttonDimensionX = syllableDimensions3.get(0), buttonDimensionY = syllableDimensions3.get(1), id = R.id.syllable3),
+                                Syllable(levelList[0].syllables[3], buttonIndex = 3, buttonDimensionX = syllableDimensions4.get(0), buttonDimensionY = syllableDimensions4.get(1), id = R.id.syllable4)
                         )
                 )
 
@@ -153,20 +189,33 @@ class SyllableActivity : AppCompatActivity() {
 //        val string: String = gson.toJson(level)
 //
 //        Log.d("json", string)
-//
-
-        val gson = Gson()
 
 
-        val br = BufferedReader(InputStreamReader(this.resources.openRawResource(R.raw.level_data)))
-        //val br = BufferedReader(FileReader("level_data.json"))
-        val listType = object: TypeToken<List<Level>>() {}.type
-        var levelList: ArrayList<Level> = ArrayList()
-        levelList = gson.fromJson(br, listType)
 
-        Log.d("levelString", levelList[0].toString())
+    }
 
-        
+    override fun onStart() {
+        Log.d("lifecycle", "onStart")
+
+        super.onStart()
+    }
+
+    override fun onPause() {
+        Log.d("lifecycle", "onPause")
+
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        Log.d("lifecycle", "onDestroy")
+
+        super.onDestroy()
+    }
+
+    override fun onStop() {
+        Log.d("lifecycle", "onStop")
+
+        super.onStop()
     }
 
 
@@ -240,13 +289,21 @@ class SyllableActivity : AppCompatActivity() {
         val word: String = "mama"
         var composedWord: String = ""
 
+        val resultList: ArrayList<Int>
+        val reversedResultList: ArrayList<Int>
+        val composedResult: ArrayList<Int> = ArrayList()
+
+        resultList = levelList[0].result
+        reversedResultList = levelList[0].resultReversed
         placeholders.get(0)
 
         placeholders.forEach {
-           composedWord += syllables[it.syllableIndex].content
+           composedResult.add(it.syllableIndex)
         }
 
-        if (word == composedWord) {
+
+
+        if (resultList.equals(composedResult) || reversedResultList.equals(composedResult)) {
 
             soundPool!!.play(succcessSoundId, 1F, 1F, 1, 0, 1F)
 
@@ -290,6 +347,9 @@ class SyllableActivity : AppCompatActivity() {
 
     private fun showAlertDialog() {
 
+
+
+
         val builder = AlertDialog.Builder(this@SyllableActivity)
         builder.setTitle("BRAWO!")
 
@@ -317,9 +377,22 @@ class SyllableActivity : AppCompatActivity() {
         //TODO uncomment this lines, easier testing without
 //        dialog.setCancelable(false)
 //        dialog.setCanceledOnTouchOutside(false)
-
+        dialog.window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
 
         dialog.show()
+
+
+        dialog.window.decorView.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LOW_PROFILE or
+                View.SYSTEM_UI_FLAG_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+
+        dialog.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+        supportActionBar?.hide()
+
 
 
     }
