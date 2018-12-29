@@ -382,7 +382,6 @@ class SyllableActivity : AppCompatActivity() {
 
 
         val builder = AlertDialog.Builder(this@SyllableActivity)
-        builder.setTitle("BRAWO!")
 
        val view = layoutInflater.inflate(R.layout.success_alert_dialog, null)
         builder.setView(view)
@@ -391,6 +390,9 @@ class SyllableActivity : AppCompatActivity() {
         val dialog: AlertDialog = builder.create()
 
         refreshButton.setOnClickListener(View.OnClickListener {
+
+            recreate()
+            dialog.dismiss()
 
             Log.d("click", "refresh")
         })
