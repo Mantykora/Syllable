@@ -400,6 +400,9 @@ class SyllableActivity : AppCompatActivity() {
         val nextButton = view.findViewById<ImageButton>(R.id.next_alert_button)
 
         nextButton.setOnClickListener(View.OnClickListener {
+            if (levelNumber == levelList.lastIndex) {
+                Log.d("SyllableActivity", "last index")
+            } else {
             val sharedPref = applicationContext?.getSharedPreferences("level", Context.MODE_PRIVATE)
             sharedPref?.edit()?.putInt("levelInt", levelNumber+1)
                     ?.apply()
@@ -407,7 +410,7 @@ class SyllableActivity : AppCompatActivity() {
             recreate()
             dialog.dismiss()
 
-            Log.d("click", "next")
+            Log.d("click", "next") }
         })
 
 
