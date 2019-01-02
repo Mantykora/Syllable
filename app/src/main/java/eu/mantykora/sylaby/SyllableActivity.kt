@@ -1,6 +1,7 @@
 package eu.mantykora.sylaby
 
 import android.content.Context
+import android.content.Intent
 import android.media.AudioAttributes
 import android.media.SoundPool
 import android.os.Bundle
@@ -338,7 +339,14 @@ class SyllableActivity : AppCompatActivity() {
 
             soundPool!!.play(succcessSoundId, 1F, 1F, 1, 0, 1F)
 
-           showAlertDialog()
+            if (levelNumber == levelList.lastIndex) {
+                Log.d("SyllableActivity", "last index")
+                showEndOfLevelDialog()
+            } else {
+                showAlertDialog()
+
+            }
+
 
             return
 
@@ -400,9 +408,7 @@ class SyllableActivity : AppCompatActivity() {
         val nextButton = view.findViewById<ImageButton>(R.id.next_alert_button)
 
         nextButton.setOnClickListener(View.OnClickListener {
-            if (levelNumber == levelList.lastIndex) {
-                Log.d("SyllableActivity", "last index")
-            } else {
+
             val sharedPref = applicationContext?.getSharedPreferences("level", Context.MODE_PRIVATE)
             sharedPref?.edit()?.putInt("levelInt", levelNumber+1)
                     ?.apply()
@@ -411,7 +417,7 @@ class SyllableActivity : AppCompatActivity() {
             dialog.dismiss()
 
             Log.d("click", "next") }
-        })
+        )
 
 
 
@@ -425,6 +431,13 @@ class SyllableActivity : AppCompatActivity() {
         dialog.show()
 
 
+        hide_dialog_bars(dialog)
+
+
+
+    }
+
+    private fun hide_dialog_bars(dialog: AlertDialog) {
         dialog.window.decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LOW_PROFILE or
                 View.SYSTEM_UI_FLAG_FULLSCREEN or
@@ -435,9 +448,30 @@ class SyllableActivity : AppCompatActivity() {
 
         dialog.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
         supportActionBar?.hide()
+    }
+
+    private fun showEndOfLevelDialog() {
 
 
+        val builder = AlertDialog.Builder(this@SyllableActivity)
 
+        val view = layoutInflater.inflate(R.layout.alert_dialog_level_end, null)
+        builder.setView(view)
+
+        val homeButton = view.findViewById<ImageButton>(R.id.end_home_bt)
+        val dialog: AlertDialog = builder.create()
+
+        homeButton.setOnClickListener(View.OnClickListener {
+
+            val intent = Intent(this@SyllableActivity, MainActivity::class.java)
+            startActivity(intent)
+        })
+
+        dialog.window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+
+        dialog.show()
+
+        hide_dialog_bars(dialog)
     }
 
 
