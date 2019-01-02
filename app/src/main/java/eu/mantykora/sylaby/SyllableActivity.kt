@@ -24,9 +24,11 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import android.graphics.drawable.Drawable
 import android.os.PersistableBundle
+import android.speech.tts.TextToSpeech
+import java.util.*
 
 
-class SyllableActivity : AppCompatActivity() {
+class SyllableActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     val placeDimensions1: IntArray = intArrayOf(0, 0)
     val placeDimensions2: IntArray = intArrayOf(0, 0)
 
@@ -47,6 +49,9 @@ class SyllableActivity : AppCompatActivity() {
     var levelList: ArrayList<Level> = ArrayList()
 
     var levelNumber = 0
+
+    private var tts: TextToSpeech? = null
+
 
 
     override fun onResume() {
@@ -211,20 +216,36 @@ class SyllableActivity : AppCompatActivity() {
 //        val string: String = gson.toJson(level)
 //
 //        Log.d("json", string)
+        tts = TextToSpeech(this, this)
+
+
+
 
 
 
     }
 
-//    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-//        super.onSaveInstanceState(outState, outPersistentState)
-//        outState?.putInt("level", levelNumber)
-//    }
-//
-//    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-//        super.onRestoreInstanceState(savedInstanceState)
-//        levelNumber = savedInstanceState?.getInt("level")!!
-//    }
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            tts!!.setLanguage(Locale("pl-PL"))
+            val resultArray = levelList[levelNumber].result
+            var resString = ""
+            resultArray.forEach {
+                resString = resString.plus(levelList[levelNumber].syllables[it])
+            }
+            speak(resString)
+        } else {
+            Log.e("TTS", "Initilization Failed!")
+
+        }
+    }
+
+    private fun speak(text: String) {
+
+      //  val text = "hihihihi"
+        tts!!.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
+    }
+
 
     override fun onStart() {
         Log.d("lifecycle", "onStart")
@@ -240,7 +261,13 @@ class SyllableActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         Log.d("lifecycle", "onDestroy")
+        if (tts != null) {
 
+            tts!!.stop()
+            tts!!.shutdown()
+            Log.d("tts", "TTS Destroyed")
+
+        }
         super.onDestroy()
     }
 
@@ -271,6 +298,8 @@ class SyllableActivity : AppCompatActivity() {
             }
 
             if (placeIndex != -1) {
+
+                speak(syllables[index].content)
 
                 val placeholder = placeholders[placeIndex]
                 placeholders[placeIndex] = placeholder.copy(isFree = false, syllableIndex = index)
