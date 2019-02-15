@@ -1,6 +1,5 @@
 package eu.mantykora.sylaby
 
-import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -9,14 +8,13 @@ import android.os.Handler
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import java.util.*
-import android.system.Os.shutdown
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_syllable.*
 
 
 class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
+    private val difficultyLevel = "difficultyLevel"
     private val mHideHandler = Handler()
     private val mHidePart2Runnable = Runnable {
         // Delayed removal of status and navigation bar
@@ -74,16 +72,22 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         hide()
 
+        val intent = Intent(this@MainActivity, SyllableActivity::class.java)
 
-        level1_cv.setOnClickListener(object : View.OnClickListener {
-
-            override fun onClick(v: View?) {
-                val intent = Intent(this@MainActivity, SyllableActivity::class.java)
+        level1_cv.setOnClickListener {
+                intent.putExtra(difficultyLevel, 1)
                 startActivity(intent)
+        }
 
-            }
-        })
+        level2_cv.setOnClickListener {
+            intent.putExtra(difficultyLevel, 2)
+            startActivity(intent)
+        }
 
+        level3_cv.setOnClickListener {
+            intent.putExtra(difficultyLevel, 3)
+            startActivity(intent)
+        }
 
     }
 

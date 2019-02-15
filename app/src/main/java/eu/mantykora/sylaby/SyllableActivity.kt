@@ -22,8 +22,6 @@ import eu.mantykora.sylaby.model.Syllable
 import kotlinx.android.synthetic.main.activity_syllable.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import android.graphics.drawable.Drawable
-import android.os.PersistableBundle
 import android.speech.tts.TextToSpeech
 import java.util.*
 
@@ -51,6 +49,8 @@ class SyllableActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     var levelNumber = 0
 
     private var tts: TextToSpeech? = null
+
+    private var difficulty = 0
 
 
 
@@ -109,8 +109,16 @@ class SyllableActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
 
         //read data from json file and save it to levelList
+        difficulty = intent.getIntExtra("difficultyLevel", 0)
+        var rawInt = 0
+        when (difficulty) {
+            1 -> rawInt = R.raw.level_data1
+            2 -> Log.d("syllableActivity", "2")
+            3 -> Log.d("syllableActivity", "3")
+        }
+
         val gson = Gson()
-        val br = BufferedReader(InputStreamReader(this.resources.openRawResource(R.raw.level_data)))
+        val br = BufferedReader(InputStreamReader(this.resources.openRawResource(rawInt)))
 
         val listType = object: TypeToken<List<Level>>() {}.type
         levelList = gson.fromJson(br, listType)
