@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         // Note that some of these constants are new as of API 16 (Jelly Bean)
         // and API 19 (KitKat). It is safe to use them, as they are inlined
         // at compile-time and do nothing on earlier devices.
-        fullscreen_content.systemUiVisibility =
+        window.decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LOW_PROFILE or
                 View.SYSTEM_UI_FLAG_FULLSCREEN or
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
@@ -84,16 +84,6 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             }
         })
 
-//
-//        ObjectAnimator.ofFloat(button3, "translationX", 20f).apply {
-//            duration = 2000
-//
-//            start()
-//        }
-
-
-
-      // button3.animate().translationX(400f);
 
     }
 
@@ -104,7 +94,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         supportActionBar?.hide()
 
         mVisible = false
-        fullscreen_content.systemUiVisibility =
+        window.decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LOW_PROFILE or
                 View.SYSTEM_UI_FLAG_FULLSCREEN or
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or

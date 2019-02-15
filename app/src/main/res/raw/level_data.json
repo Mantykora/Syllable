@@ -20,6 +20,17 @@
         "ta",
         "ma"
       ]
-    }
+    },
+  {
+     "imagePath": "ic_doll",
+      "result": [1, 2],
+      "resultReversed": [2, 1],
+       "syllables": [
+         "ta",
+         "la",
+         "la",
+         "ba"
+       ]
+  }
 ]
 
