@@ -1,0 +1,34 @@
+[
+  {
+    "imagePath": "ic_breastfeeding",
+    "result": [0, 2, 1],
+    "syllables": [
+      "mo",
+      "lek",
+      "ty",
+      "ba"
+    ]
+  },
+  {
+    "imagePath": "ic_father",
+    "result": [1, 2],
+    "resultReversed": [2, 1],
+    "syllables": [
+      "ba",
+      "ta",
+      "ta",
+      "ma"
+    ]
+  },
+  {
+    "imagePath": "ic_doll",
+    "result": [1, 2],
+    "resultReversed": [2, 1],
+    "syllables": [
+      "ta",
+      "la",
+      "la",
+      "ba"
+    ]
+  }
+]

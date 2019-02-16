@@ -33,13 +33,22 @@
     <Button
         android:id="@+id/placeHolder2"
         style="@style/button_style"
-        android:background="@drawable/placeholder_shape"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.137"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/placeholder_shape"
+        app:layout_constraintEnd_toStartOf="@+id/placeHolder3"
         app:layout_constraintStart_toEndOf="@+id/placeHolder1"
         app:layout_constraintTop_toTopOf="@+id/placeHolder1" />
+
+    <Button
+        android:id="@+id/placeHolder3"
+        style="@style/button_style"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/placeholder_shape"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/placeHolder2"
+        app:layout_constraintTop_toTopOf="@+id/placeHolder2" />
 
     <Button
         android:id="@+id/syllable1"
@@ -86,4 +95,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/syllable3"
         app:layout_constraintTop_toTopOf="@+id/syllable3" />
+
 </android.support.constraint.ConstraintLayout>

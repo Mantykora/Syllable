@@ -29,6 +29,7 @@ import java.util.*
 class SyllableActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     val placeDimensions1: IntArray = intArrayOf(0, 0)
     val placeDimensions2: IntArray = intArrayOf(0, 0)
+    val placeDimensions3: IntArray = intArrayOf(0, 0)
 
     val booleanArray = arrayOf(false, false, false, false)
     val isFreeBooleanArray = arrayOf(true, true)
@@ -113,7 +114,7 @@ class SyllableActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         var rawInt = 0
         when (difficulty) {
             1 -> rawInt = R.raw.level_data1
-            2 -> Log.d("syllableActivity", "2")
+            2 -> rawInt = R.raw.level_data2
             3 -> Log.d("syllableActivity", "3")
         }
 
@@ -142,6 +143,7 @@ class SyllableActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
                 placeHolder1.getLocationInWindow(placeDimensions1)
                 placeHolder2.getLocationInWindow(placeDimensions2)
+                placeHolder3.getLocationInWindow(placeDimensions3)
 
                 syllable1.getLocationInWindow(syllableDimensions1)
                 syllable2.getLocationInWindow(syllableDimensions2)
@@ -160,7 +162,8 @@ class SyllableActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 placeholders.addAll(
                         listOf(
                                Placeholder(0, placeDimensions1.get(0), placeDimensions1.get(1)),
-                                Placeholder(1, placeDimensions2.get(0), placeDimensions2.get(1))
+                                Placeholder(1, placeDimensions2.get(0), placeDimensions2.get(1)),
+                                Placeholder(2, placeDimensions3.get(0), placeDimensions3.get(1))
                         )
                 )
 
@@ -227,7 +230,9 @@ class SyllableActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         tts = TextToSpeech(this, this)
 
 
-
+        if (levelList[levelNumber].result.size < 3) {
+            placeHolder3.visibility = View.GONE
+        }
 
 
 
@@ -366,9 +371,15 @@ class SyllableActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         reversedResultList = levelList[levelNumber].resultReversed
         placeholders.get(0)
 
+        if (levelList[levelNumber].result.size < 3) {
+            placeholders.removeAt(2)
+            Log.d("placeholdersSze", placeholders.size.toString())
+        }
+
         placeholders.forEach {
            composedResult.add(it.syllableIndex)
         }
+
 
 
 
