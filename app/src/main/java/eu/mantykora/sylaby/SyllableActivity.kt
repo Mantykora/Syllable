@@ -297,6 +297,11 @@ class SyllableActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         var placeIndex: Int = 0
 
+        if (levelList[levelNumber].result.size < 3 && placeholders.size > 2) {
+            placeholders.removeAt(2)
+            Log.d("placeholdersSze", placeholders.size.toString())
+        }
+
 
 
         val syllable = syllables[index];
@@ -367,14 +372,12 @@ class SyllableActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         val reversedResultList: ArrayList<Int>
         val composedResult: ArrayList<Int> = ArrayList()
 
+
         resultList = levelList[levelNumber].result
         reversedResultList = levelList[levelNumber].resultReversed
         placeholders.get(0)
 
-        if (levelList[levelNumber].result.size < 3) {
-            placeholders.removeAt(2)
-            Log.d("placeholdersSze", placeholders.size.toString())
-        }
+
 
         placeholders.forEach {
            composedResult.add(it.syllableIndex)
@@ -439,7 +442,7 @@ class SyllableActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         val builder = AlertDialog.Builder(this@SyllableActivity)
 
-       val view = layoutInflater.inflate(R.layout.success_alert_dialog, null)
+        val view = layoutInflater.inflate(R.layout.success_alert_dialog, null)
         builder.setView(view)
 
         val refreshButton = view.findViewById<ImageButton>(R.id.refresh_alert_button)
@@ -452,6 +455,7 @@ class SyllableActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
             Log.d("click", "refresh")
         })
+
 
         val nextButton = view.findViewById<ImageButton>(R.id.next_alert_button)
 
