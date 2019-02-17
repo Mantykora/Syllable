@@ -94,6 +94,9 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     override fun onResume() {
         super.onResume()
 
+        this.getSharedPreferences("level", Context.MODE_PRIVATE).edit().clear().apply();
+
+
         // Hide UI first
         supportActionBar?.hide()
 
