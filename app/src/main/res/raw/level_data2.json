@@ -1,6 +1,6 @@
 [
   {
-    "imagePath": "ic_breastfeeding",
+    "imagePath": "ic_butterfly",
     "result": [0, 2, 1],
     "syllables": [
       "mo",
@@ -10,25 +10,23 @@
     ]
   },
   {
-    "imagePath": "ic_father",
-    "result": [1, 2],
-    "resultReversed": [2, 1],
+    "imagePath": "ic_parrot",
+    "result": [1, 0, 3],
     "syllables": [
-      "ba",
-      "ta",
-      "ta",
-      "ma"
+      "pu",
+      "pa",
+      "da",
+      "ga"
     ]
   },
   {
-    "imagePath": "ic_doll",
+    "imagePath": "ic_crow",
     "result": [1, 2],
-    "resultReversed": [2, 1],
     "syllables": [
-      "ta",
-      "la",
-      "la",
-      "ba"
+      "ce",
+      "wro",
+      "na",
+      "pa"
     ]
   }
 ]
